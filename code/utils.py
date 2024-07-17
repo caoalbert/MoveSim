@@ -37,6 +37,11 @@ def get_acc(target, scores):
             acc[2] += 1
     return acc
 
+def get_gps_ccg(gps_file):
+    X = np.load(gps_file+'/X.npy')
+    Y = np.load(gps_file+'/Y.npy')
+    return Y, X
+
 
 def get_gps(gps_file):
     with open(gps_file) as f:
@@ -64,6 +69,10 @@ def read_data_from_file(fp):
             tmp = line.split()
             dat += [[int(t) for t in tmp]]
     return np.asarray(dat, dtype='int64')
+
+def read_data_from_file_ccg(fp):
+    lis = np.load(fp)
+    return lis
 
 
 def write_data_to_file(fp, dat):

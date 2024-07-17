@@ -25,7 +25,7 @@ class GANLoss(nn.Module):
         if prob.is_cuda:
             one_hot = one_hot.to(device)
         one_hot.scatter_(1, target.data.view((-1, 1)), 1)
-        one_hot = one_hot.type(torch.ByteTensor)
+        one_hot = one_hot.type(torch.BoolTensor)
         one_hot = Variable(one_hot)
         if prob.is_cuda:
             one_hot = one_hot.to(device)

@@ -8,7 +8,7 @@ import scipy.stats
 import numpy as np
 from collections import Counter
 from math import radians, cos, sin, asin, sqrt
-from utils import get_gps, read_data_from_file, read_logs_from_file
+from utils import get_gps, read_data_from_file, read_logs_from_file, get_gps_ccg
 
 
 def geodistance(lng1,lat1,lng2,lat2):
@@ -112,9 +112,13 @@ class IndividualEval(object):
             self.X, self.Y = get_gps('../data/mobile/gps')
             self.max_locs = 8606
             self.max_distance = 2.088
-        else:
+        elif data == 'geolife':
             self.X, self.Y = get_gps('../data/geolife/gps')
             self.max_locs = 23768
+            self.max_distance = 247.3
+        elif data == 'ccg':
+            self.X, self.Y = get_gps_ccg('../data/ccg')
+            self.max_locs = 81250
             self.max_distance = 247.3
    
 

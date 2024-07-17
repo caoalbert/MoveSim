@@ -46,13 +46,7 @@ class GenDataIter(object):
         return data, target
 
     def read_file(self, data_file):
-        with open(data_file, 'r') as f:
-            lines = f.readlines()
-        lis = []
-        for line in lines:
-            l = line.strip().split(' ')
-            l = [int(s) for s in l]
-            lis.append(l)
+        lis = np.load(data_file)
         return lis
 
 
@@ -62,7 +56,7 @@ class NewGenIter(object):
     def __init__(self, data_file, batch_size):
         super(NewGenIter, self).__init__()
         self.batch_size = batch_size
-        self.data_lis = self.read_file(data_file)
+        self.data_lis = self.read_file_ccg(data_file)
         self.data_num = len(self.data_lis)
         self.indices = range(self.data_num)
         self.num_batches = int(
@@ -103,14 +97,18 @@ class NewGenIter(object):
             lis.append(l)
         return lis
 
+    def read_file_ccg(self, data_file):
+        lis = np.load(data_file)
+        return lis
+
 
 class DisDataIter(object):
     """ Toy data iter to load digits"""
 
-    def __init__(self, real_data_file, fake_data_file, batch_size,length):
+    def __init__(self, real_data_file, fake_data_file, batch_size, length, gen_data=False):
         super(DisDataIter, self).__init__()
         self.batch_size = batch_size
-        real_data_lis = self.read_file(real_data_file)
+        real_data_lis = self.read_file_ccg(real_data_file)
         t2 = real_data_lis
 
         if len(t2[0])!=length:
@@ -141,7 +139,10 @@ class DisDataIter(object):
                     t3.append(t)
                     
             real_data_lis = t3
-        fake_data_lis = self.read_file(fake_data_file)
+        if gen_data:
+            fake_data_lis = self.read_file(fake_data_file)
+        else:
+            fake_data_lis = self.read_file_ccg(fake_data_file)
         t2 = fake_data_lis
         if len(t2[0])!=length:
             if length == 24:
@@ -171,7 +172,8 @@ class DisDataIter(object):
                     t3.append(t)
                     
             fake_data_lis = t3
-        self.data = real_data_lis + fake_data_lis
+        # self.data = real_data_lis + fake_data_lis
+        self.data = np.concatenate([real_data_lis, fake_data_lis], axis=0)
         self.labels = [1 for _ in range(len(real_data_lis))] + \
                       [0 for _ in range(len(fake_data_lis))]
         self.pairs = list(zip(self.data, self.labels))
@@ -214,6 +216,10 @@ class DisDataIter(object):
             l = line.strip().split(' ')
             l = [int(s) for s in l]
             lis.append(l)
+        return lis
+    
+    def read_file_ccg(self, data_file):
+        lis = np.load(data_file)
         return lis
 
 
@@ -277,7 +283,8 @@ class TCDisDataIter(object):
         self.batch_size = batch_size
         real_data_lis = self.read_file(real_data_file)
         fake_data_lis = self.read_file(fake_data_file)
-        self.data = real_data_lis + fake_data_lis
+        # self.data = real_data_lis + fake_data_lis
+        self.data = np.concatenate([real_data_lis, fake_data_lis], axis=0)
         self.labels = [1 for _ in range(len(real_data_lis))] + \
                       [0 for _ in range(len(fake_data_lis))]
         self.pairs = list(zip(self.data, self.labels))

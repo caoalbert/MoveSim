@@ -1,7 +1,6 @@
 # coding: utf-8
 import sys
 sys.path.append('../')
-
 import pdb              
 import math
 import torch
@@ -12,7 +11,7 @@ from torch.autograd import Variable
 from torch.nn import functional as F
 
 from utils import *
-
+os.chdir('MoveSim/code/')
 
 def gen_gaussian_dist(sigma=10):
     """Return a single-sided gaussian distribution weight array and its index.

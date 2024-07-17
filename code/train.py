@@ -46,7 +46,7 @@ def pretrain_model(
 def train_epoch(name, model, data_iter, criterion, optimizer, batch_size, device=None):
     total_loss = 0.
     if name == "G":
-        tim = torch.LongTensor([i%24 for i in range(47)]).to(device)
+        tim = torch.LongTensor([i%24 for i in range(47-24)]).to(device)
         tim = tim.repeat(batch_size).reshape(batch_size, -1)
     for i, (data, target) in enumerate(data_iter):
         data = torch.LongTensor(data).to(device)
